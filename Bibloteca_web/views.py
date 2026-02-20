@@ -17,7 +17,7 @@ def registro_usuario(request):
         password = request.POST.get('password')
         try:
             #Vamos a crear en fire base auth
-            user = auth.create.user(
+            user = auth.create_user(
                 email = email,
                 password = password
             )
