@@ -7,7 +7,7 @@ from functools import wraps
 import requests
 import os
 
-#Inicializar la base de datos con firestore
+#Inicializar la base de datos con firestore.
 db = initialize_firebase()
 
 def registro_usuario(request):
