@@ -161,7 +161,7 @@ def listar_recerva(request):
             recervas.append[recervas]
     except Exception as e:
         messages.error(request, f"Hubo un error al obtener las recervas {e}")
-    return render(request, 'libros/listar..html', {'recervas':recervas})
+    return render(request, 'libros/listar.html', {'recervas':recervas})
 
 
 @login_required_firebase
