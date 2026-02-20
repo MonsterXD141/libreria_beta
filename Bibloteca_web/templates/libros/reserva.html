@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Biblioteca Proyect</title>
+
+<!---NO ES RESPONSIVE, LO DEJE PARA QUE SOLO SE ADAPTARA AL COPUTADOR/PORTATIL-->
+
+<style>
+
+body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar{
+    background: linear-gradient(90deg,#6a00ff,#8e2de2);
+    color:white;
+    padding:20px 40px;
+    font-weight:bold;
+    font-size:22px;
+    letter-spacing:2px;
+}
+
+.contenedor{
+    display:flex;
+    height:calc(100vh - 70px);
+}
+
+.izquierda{
+    flex:2;
+    background:#e6e6e6;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.formulario{
+    background: linear-gradient(180deg,#6a00ff,#8e2de2);
+    padding:40px;
+    width:350px;
+    color:white;
+    border-radius:10px;
+}
+
+.formulario h2{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.formulario label{
+    display:block;
+    margin-top:15px;
+    font-size:14px;
+}
+
+.formulario input{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border:none;
+    border-radius:5px;
+}
+
+.formulario button{
+    margin-top:25px;
+    width:100%;
+    padding:12px;
+    background:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.formulario button:hover{
+    background:#f0f0f0;
+}
+
+.derecha{
+    flex:1;
+    background: linear-gradient(180deg,#6a00ff,#8e2de2);
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:40px 20px;
+}
+
+.derecha img{
+    width:100px;
+    margin-bottom:20px;
+}
+
+.info{
+    text-align:left;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.boton-blanco{
+    background:white;
+    color:black;
+    border:none;
+    padding:10px;
+    width:150px;
+    margin-top:10px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+.boton-blanco:hover{
+    background:#f0f0f0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    BIBLIOTECA PROYECT
+</div>
+
+<div class="contenedor">
+
+    <div class="izquierda">
+
+        <form class="formulario" method="POST">
+             {% csrf_token %}     <!-- No quitarlo por el momento0 -->
+
+            <h2>FORMULARIO DE RESERVA</h2>
+
+            <label>Nombre del libro</label>
+            <input type="text" name="libro" placeholder="ejemplo: cien años de soledad" required>
+
+            <label>Fecha de reserva</label>
+            <input type="text" name="fecha" placeholder="ejemplo: 14/02/2026" required>
+
+            <button type="submit">Reservar</button>
+        </form>
+
+    </div>
+
+    <div class="derecha">
+
+        <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
+
+        <h2>Mi Perfil</h2>
+
+        <div class="info">
+            <p>Correo: {{ user.email }}</p>
+            <p>Fecha de registro: {{ user.date_joined }}</p>
+        </div>
+
+        <button class="boton-blanco" onclick="window.location.href='/reservas/'">
+            Volver al inicio 
+        </button>
+
+        <button class="boton-blanco" onclick="window.location.href='/logout/'">
+            Cerrar sesión
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+
+
