@@ -11,5 +11,5 @@ urlpatterns =[
     path('libros/', views.listar_recerva, name='listar_recerva'),
     path('libros/reserva/', views.crear_reserva, name='crear_recerva'),
     path('libros/eliminar/<str:recerba_id>/', views.eliminar_reserva, name='eliminar_recerva'),
-    
+    path('libros/editar/<str:recerba_id>/', views.editar_recerva, name='editar_recerva')
 ]

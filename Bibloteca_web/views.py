@@ -200,3 +200,41 @@ def eliminar_reserva(request, recerva_id):
     except Exception as e:
         messages.error(request,f"Error al eliminar: {e}")
     return redirect('listar_recervas')
+
+
+@login_required_firebase
+def editar_recerva(request, recerva_id):
+    """
+    UPDATE: Recuperar los datos de la recerva epecifica y actuaza los campos en fire base
+    """
+
+    uid = request.session.get('uid')
+    recerva_ref = db.collection('recervas').document(recerva_id_id)
+
+    try:
+        doc = recerva_ref.get()
+        if not doc.exists:
+            messages.error(request, "La recerva no existe")
+            return redirect ('Listar_taareas')
+        
+        recerva_data= doc.to_dict()
+
+        if recerva_data.get('usuario_id') != uid:
+            messages.error(request,"No tienes permiso para editar esta recerva")
+            return redirect('listar_recervas')
+        
+        if request.method == 'POST':
+            nuevo_titulo = request.POST.get('titulo')
+            fecha_recerva = request.POST.get('fecha_recerva')
+
+            recerva_ref.update({
+                'titulo' : nuevo_titulo,
+                'fecha_recerva' : fecha_recerva,
+                'fecha_actualizacion': firestore.SERVER_TIMESTAMP
+            })
+            messages.success(request, "Recerva actualizada correctamente.")
+            return redirect('listar_recervas')
+    except Exception as  e:
+        messages.error(request, f" Error al editar la recerva: {e}")
+        return redirect('listar_recervas')
+    return render(request, 'recervas/editar.html',{'recervas':recerva_data, 'id':recerva_id})
