@@ -107,7 +107,7 @@ def iniciar_sesion(request):
     
     return render(request, 'login.html')
 
-def cerrar_secion(request):
+def cerrar_sesion(request):
     #limpiar la cecion y luego se redirije
     request.session.flush()
     messages.info(request,"Has cerrado secion correctamente")
@@ -140,3 +140,50 @@ def dashboard(request):
     except Exception as e:
         messages.error(request, f"Error al cargar los datos de la BD: {e}")
     return render(request, 'dashboard.html', {'datos': datos_usuario})
+
+
+@login_required_firebase
+def listar_recerva(request):
+    """
+    READ: Recuperar las recervas del usuario
+    """
+
+    uid = requests.sessio.get('uid')
+    recervas =[]
+
+    try:
+        #vamos a filtrar las recervas del usuario
+
+        docs = db.collection('recervas').where('usuario_id', '==',uid).stream()
+        for doc in docs:
+            recerva = doc.to_dict()
+            recerva['id'] = doc.id
+            recervas.append[recervas]
+    except Exception as e:
+        messages.error(request, f"Hubo un error al obtener las recervas {e}")
+    return render(request, 'libros/listar..html', {'recervas':recervas})
+
+
+@login_required_firebase
+def crear_reserva(request):
+    """
+    CREATE: recibe los datos desde el formulario y se almacenan
+    """
+
+    if (request.method == 'POST'):
+        titulo = request.POST.get('titulo')
+        fecha_recerva = request.POST.get('fecha_recerva')
+        uid = request.POST.get('uid')
+
+        try:
+            db.collection('recervas').add({
+                'titulo' : titulo,
+                'fecha_recerva' : fecha_recerva,
+                'usuario_id' : uid ,
+                'fecha_creacion' : firestore.SERVER_TIMESTAMP
+            })
+            messages.succes(request, "recerva creada con exito")
+            return redirect('lista_recerva')
+        except Exception as e:
+            messages.error(request, f"Error al crear la reserva {e}")
+    return render(request, 'libros/form.html')
