@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Biblioteca Proyect</title>
+
+<!---NO ES RESPONSIVE, LO DEJE PARA QUE SOLO SE ADAPTARA AL COPUTADOR/PORTATIL-->
+
+<style>
+
+body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar{
+    background: linear-gradient(90deg,#6a00ff,#8e2de2);
+    color:white;
+    padding:20px 40px;
+    font-weight:bold;
+    font-size:22px;
+    letter-spacing:2px;
+}
+
+.contenedor{
+    display:flex;
+    height:calc(100vh - 70px);
+}
+
+.izquierda{
+    flex:2;
+    background:#e6e6e6;
+    padding:40px;
+    overflow:auto;
+}
+
+.tabla-contenedor{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+.tabla-contenedor h2{
+    margin-bottom:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th, td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+th{
+    background:#6a00ff;
+    color:white;
+}
+
+tr:hover{
+    background:#f2f2f2;
+}
+
+.pendiente{
+    color:orange;
+    font-weight:bold;
+}
+
+.confirmada{
+    color:green;
+    font-weight:bold;
+}
+
+.cancelada{
+    color:red;
+    font-weight:bold;
+}
+
+.derecha{
+    flex:1;
+    background: linear-gradient(180deg,#6a00ff,#8e2de2);
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:40px 20px;
+}
+
+.derecha img{
+    width:100px;
+    margin-bottom:20px;
+}
+
+.info{
+    text-align:left;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.boton-blanco{
+    background:white;
+    color:black;
+    border:none;
+    padding:10px;
+    width:150px;
+    margin-top:10px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+.boton-blanco:hover{
+    background:#f0f0f0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    BIBLIOTECA PROYECT
+</div>
+
+<div class="contenedor">
+
+    <div class="izquierda">
+
+        <div class="tabla-contenedor">
+            <h2>Reservas Realizadas</h2>
+
+            <table>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Estado</th>
+                </tr>
+
+                {% for reserva in reservas %}   <!-- No quitarlo por el momento0 -->
+                <tr>
+                    <td>{{ reserva.fecha }}</td>
+                    <td>{{ reserva.usuario }}</td>
+                    <td>{{ reserva.libro }}</td>
+
+                    <td class="
+                        {% if reserva.estado == 'pendiente' %}pendiente
+                        {% elif reserva.estado == 'confirmada' %}confirmada
+                        {% else %}cancelada
+                        {% endif %}
+                    ">
+                        {{ reserva.estado }}
+                    </td>
+                </tr>
+                {% empty %}      <!-- No quitarlo por el momento0 -->
+                <tr>
+                    <td colspan="4">No hay reservas registradas.</td>
+                </tr>
+                {% endfor %}   <!-- No quitarlo por el momento0 -->
+
+            </table>
+        </div>
+
+    </div>
+
+    <div class="derecha">
+
+        <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
+
+        <h2>Mi Perfil</h2>
+
+        <div class="info">
+            <p>Correo: {{ user.email }}</p>
+            <p>Fecha de registro: {{ user.date_joined }}</p>
+        </div>
+
+        <button class="boton-blanco" onclick="window.location.href='/reservas/'">
+            Ver reservas
+        </button>
+
+        <button class="boton-blanco" onclick="window.location.href='/logout/'">
+            Cerrar sesión
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+
