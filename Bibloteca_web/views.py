@@ -7,7 +7,7 @@ from functools import wraps
 import requests
 import os
 
-#Inicializar la base de datos con firestore.
+#Inicializar la base de datos con firestore
 db = initialize_firebase()
 
 def registro_usuario(request):
@@ -99,7 +99,6 @@ def iniciar_sesion(request):
 
                 mensaje_usuario = errores_comunes.get(error_message, "Error de autenticacion")
                 messages.error(request, mensaje_usuario)
-            
         except requests.exceptions.RequestException as e:
             messages.error(request, "Error de conexion con el servidor")
         except Exception as e:
@@ -148,7 +147,7 @@ def listar_recerva(request):
     READ: Recuperar las recervas del usuario
     """
 
-    uid = requests.sessio.get('uid')
+    uid = request.session.get('uid')
     recervas =[]
 
     try:
@@ -186,7 +185,7 @@ def crear_reserva(request):
             return redirect('lista_recerva')
         except Exception as e:
             messages.error(request, f"Error al crear la reserva {e}")
-    return render(request, 'libros/form.html')
+    return render(request, 'libros/reserva.html')
 
 @login_required_firebase
 def eliminar_reserva(request, recerva_id):
@@ -199,7 +198,7 @@ def eliminar_reserva(request, recerva_id):
         messages.success(request, "recerva eliminada.")
     except Exception as e:
         messages.error(request,f"Error al eliminar: {e}")
-    return redirect('listar_recervas')
+    return redirect('listar_recerva')
 
 
 @login_required_firebase
@@ -209,13 +208,13 @@ def editar_recerva(request, recerva_id):
     """
 
     uid = request.session.get('uid')
-    recerva_ref = db.collection('recervas').document(recerva_id_id)
+    recerva_ref = db.collection('recervas').document(recerva_id)
 
     try:
         doc = recerva_ref.get()
         if not doc.exists:
             messages.error(request, "La recerva no existe")
-            return redirect ('Listar_taareas')
+            return redirect ('listar_recerva')
         
         recerva_data= doc.to_dict()
 
@@ -237,4 +236,4 @@ def editar_recerva(request, recerva_id):
     except Exception as  e:
         messages.error(request, f" Error al editar la recerva: {e}")
         return redirect('listar_recervas')
-    return render(request, 'recervas/editar.html',{'recervas':recerva_data, 'id':recerva_id})
+    return render(request, 'libros/editar.html',{'recervas':recerva_data, 'id':recerva_id})
