@@ -112,3 +112,31 @@ def cerrar_secion(request):
     request.session.flush()
     messages.info(request,"Has cerrado secion correctamente")
     return redirect('login')
+
+@login_required_firebase
+def dashboard(request):
+    """
+    panel principal este. solo es accesible si el decorador lo permite
+    Revuperar los datos de firestore
+    """
+
+    uid = request.session.get('uid')
+    datos_usuario = {}
+    try:
+        #consulta a firestore usando nuestro SDK
+        doc_ref = db.collection('perfiles').document(uid)
+        doc = doc_ref.get()
+        
+        if doc.exists:
+            datos_usuario = doc.to_dict()
+        else:
+            # si entra en el auth pero no tiene un perfil en firestore, manejo el caso
+            datos_usuario={
+                'email' : request.session.get('email'),
+                'uid' : request.session.get('uid'),
+                'rol' : 'usuario',
+                'fecha_registro' : firestore.SERVER_TIMESTAMP,
+            }
+    except Exception as e:
+        messages.error(request, f"Error al cargar los datos de la BD: {e}")
+    return render(request, 'dashboard.html', {'datos': datos_usuario})
