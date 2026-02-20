@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIBLIOTECA</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2711f0, #490780);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #4637ce;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4637ce;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4637ce;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3a2c9e;
+        }
+
+        .success {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #e6f9ec;
+            color: #17ff02;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .error {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #fdecea;
+            color: #ff0019;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h2>Registro de Biblioteca</h2>
+
+        <form method="POST">
+
+            <label>Correo electrónico</label>
+            <input type="email" name="email" placeholder="@gmail.com" required>
+
+            <label>Contraseña</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Crear cuenta</button>
+        </form>
+
+            <p class="{% if 'Registro exitosamente' in mensaje %}success{% else %}error{% endif %}">
+            </p>
+    </div>
+
+</body>
+</html>
