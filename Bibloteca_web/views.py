@@ -187,3 +187,16 @@ def crear_reserva(request):
         except Exception as e:
             messages.error(request, f"Error al crear la reserva {e}")
     return render(request, 'libros/form.html')
+
+@login_required_firebase
+def eliminar_reserva(request, recerva_id):
+    """
+    DELETE: Elimina el documento especifico por id
+    """
+
+    try:
+        db.collection('recervas').document(recerva_id).delete()
+        messages.success(request, "recerva eliminada.")
+    except Exception as e:
+        messages.error(request,f"Error al eliminar: {e}")
+    return redirect('listar_recervas')
