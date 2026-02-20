@@ -106,3 +106,9 @@ def iniciar_sesion(request):
             messages.error(request, f"Error inesperado: {str(e)}")
     
     return render(request, 'login.html')
+
+def cerrar_secion(request):
+    #limpiar la cecion y luego se redirije
+    request.session.flush()
+    messages.info(request,"Has cerrado secion correctamente")
+    return redirect('login')
