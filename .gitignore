@@ -1,0 +1,10 @@
+#Ambiente virtual
+venv/
+#variable de entorno
+.env
+config/.env
+config/serviceAccountKey.json
+#BD
+*squlite3
+#Carpetas de python
+__pycache__/
