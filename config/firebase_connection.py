@@ -9,7 +9,7 @@ def initialize_firebase():
     if not firebase_admin._apps:
         try:
 
-            base_dir = os.path.dirname(os.path.abspath(__file__))
+            base_dir = os.path.dirname(os.path.abspath(_file_))
 
             file_name = os.getenv('FIREBASE_KEYS_PATH')
 
