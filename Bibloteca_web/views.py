@@ -26,11 +26,12 @@ def registro_usuario(request):
             db.collection('perfiles').document(user.uid).set({
                 'email' :email,
                 'uid' : user.uid,
-                'rol' : 'aprensiz',
+                'rol' : 'aprendiz',
                 'fecha_registro': firestore.SERVER_TIMESTAMP
             })
 
             mesaje= f"Usuario registrado corectamente con USD: {user.uid}"
+            return redirect('login')
         except Exception as e:
             mesaje= f"😱 Error_: {e}"
             
@@ -144,96 +145,104 @@ def dashboard(request):
 @login_required_firebase
 def listar_recerva(request):
     """
-    READ: Recuperar las recervas del usuario
+    READ: Recuperar las reservas del usuario
     """
 
     uid = request.session.get('uid')
-    recervas =[]
-
+    reservas =[]
     try:
         #vamos a filtrar las recervas del usuario
 
-        docs = db.collection('recervas').where('usuario_id', '==',uid).stream()
+        docs = db.collection('reservas').where('usuario_id', '==',uid).stream()
         for doc in docs:
-            recerva = doc.to_dict()
-            recerva['id'] = doc.id
-            recervas.append[recervas]
+            reserva = doc.to_dict()
+            reserva['id'] = doc.id
+            reservas.append(reserva)
     except Exception as e:
-        messages.error(request, f"Hubo un error al obtener las recervas {e}")
-    return render(request, 'libros/listar.html', {'recervas':recervas})
-
+        messages.error(request, f"Hubo un error al obtener las reservas {e}")
+    return render(request, 'libros/listar.html', {'reservas':reservas})
 
 @login_required_firebase
 def crear_reserva(request):
     """
-    CREATE: recibe los datos desde el formulario y se almacenan
+    CREATE: recibe los datos desde el formulario y los almacena
     """
 
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         titulo = request.POST.get('titulo')
-        fecha_recerva = request.POST.get('fecha_recerva')
-        uid = request.POST.get('uid')
+        fecha_reserva = request.POST.get('fecha_recerva')
+        uid = request.session.get('uid')
+
+        if not titulo or not fecha_reserva:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect('crear_recerva')
 
         try:
-            db.collection('recervas').add({
-                'titulo' : titulo,
-                'fecha_recerva' : fecha_recerva,
-                'usuario_id' : uid ,
-                'fecha_creacion' : firestore.SERVER_TIMESTAMP
+            db.collection('reservas').add({
+                'titulo': titulo,
+                'fecha_reserva': fecha_reserva,
+                'estado': "por entregar",
+                'usuario_id': uid,
+                'fecha_creacion': firestore.SERVER_TIMESTAMP
             })
-            messages.succes(request, "recerva creada con exito")
-            return redirect('lista_recerva')
+
+            messages.success(request, "Reserva creada con éxito.")
+            return redirect('listar_recerva')
+
         except Exception as e:
-            messages.error(request, f"Error al crear la reserva {e}")
+            messages.error(request, f"Error al crear la reserva: {e}")
+
     return render(request, 'libros/reserva.html')
 
 @login_required_firebase
-def eliminar_reserva(request, recerva_id):
+def eliminar_reserva(request, reserva_id):
     """
     DELETE: Elimina el documento especifico por id
     """
 
     try:
-        db.collection('recervas').document(recerva_id).delete()
-        messages.success(request, "recerva eliminada.")
+        db.collection('reservas').document(reserva_id).delete()
+        messages.success(request, "reserva eliminada.")
     except Exception as e:
         messages.error(request,f"Error al eliminar: {e}")
     return redirect('listar_recerva')
 
 
 @login_required_firebase
-def editar_recerva(request, recerva_id):
+def editar_recerva(request, reserva_id):
     """
-    UPDATE: Recuperar los datos de la recerva epecifica y actuaza los campos en fire base
+    UPDATE: Recuperar los datos de la reserva epecifica y actuaza los campos en fire base
     """
 
     uid = request.session.get('uid')
-    recerva_ref = db.collection('recervas').document(recerva_id)
+    reserva_ref = db.collection('reservas').document(reserva_id)
 
     try:
-        doc = recerva_ref.get()
+        doc = reserva_ref.get()
         if not doc.exists:
-            messages.error(request, "La recerva no existe")
+            messages.error(request, "La reserva no existe")
             return redirect ('listar_recerva')
         
-        recerva_data= doc.to_dict()
+        reserva_data= doc.to_dict()
 
-        if recerva_data.get('usuario_id') != uid:
+        if reserva_data.get('usuario_id') != uid:
             messages.error(request,"No tienes permiso para editar esta recerva")
-            return redirect('listar_recervas')
+            return redirect('listar_recerva')
         
         if request.method == 'POST':
             nuevo_titulo = request.POST.get('titulo')
-            fecha_recerva = request.POST.get('fecha_recerva')
+            fecha_reserva = request.POST.get('fecha_reserva')
+            nuevo_estado = request.POST.get('estado')
 
-            recerva_ref.update({
+            reserva_ref.update({
                 'titulo' : nuevo_titulo,
-                'fecha_recerva' : fecha_recerva,
+                'fecha_reserva' : fecha_reserva,
+                'estado': nuevo_estado,
                 'fecha_actualizacion': firestore.SERVER_TIMESTAMP
             })
             messages.success(request, "Recerva actualizada correctamente.")
-            return redirect('listar_recervas')
+            return redirect('listar_recerva')
     except Exception as  e:
         messages.error(request, f" Error al editar la recerva: {e}")
-        return redirect('listar_recervas')
-    return render(request, 'libros/editar.html',{'recervas':recerva_data, 'id':recerva_id})
+        return redirect('listar_recerva')
+    return render(request, 'libros/editar.html',{'recervas':reserva_data, 'id':reserva_id})
