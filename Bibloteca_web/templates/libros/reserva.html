@@ -153,80 +153,81 @@ body{
 
 <body>
 
-<!-- Navbar -->
-<div class="navbar">
-    BIBLIOTECA PROYECT
-</div>
-
-<!-- Layout principal -->
-<div class="contenedor">
-
-    <!-- PANEL IZQUIERDO -->
-    <div class="izquierda">
-
-        <!-- 
-        FORMULARIO DJANGO
-        method="POST" → correcto para crear reservas
-        -->
-        <form class="formulario" method="POST">
-
-             <!-- 
-             CRÍTICO EN DJANGO:
-             Protección CSRF
-             ✔ Nunca eliminar
-             -->
-             {% csrf_token %}
-
-            <h2>FORMULARIO DE RESERVA</h2>
-
-            <!-- Campo libro -->
-            <label>Nombre del libro</label>
-            <input 
-                type="text" 
-                name="libro"  <!-- Debe coincidir con views.py -->
-                placeholder="ejemplo: cien años de soledad"
-                required>
-
-            <!-- Campo fecha -->
-            <label>Fecha de reserva</label>
-            <input 
-                type="text" 
-                name="fecha"
-                placeholder="ejemplo: 14/02/2026"
-                required>
-
-            <!-- Submit -->
-            <button type="submit">Reservar</button>
-        </form>
-
+    <!-- Navbar -->
+    <div class="navbar">
+        BIBLIOTECA PROYECT
     </div>
 
-    <!-- PANEL DERECHO -->
-    <div class="derecha">
+    <!-- Layout principal -->
+    <div class="contenedor">
 
-        <!-- Imagen decorativa -->
-        <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
+        <!-- PANEL IZQUIERDO -->
+        <div class="izquierda">
 
-        <h2>Mi Perfil</h2>
+            <!-- 
+            FORMULARIO DJANGO
+            method="POST" → correcto para crear reservas
+            -->
+            <form class="formulario" method="POST">
 
-        <!-- Variables Django -->
-        <div class="info">
-            <p>Correo: {{ user.email }}</p>
-            <p>Fecha de registro: {{ user.date_joined }}</p>
+                <!-- 
+                CRÍTICO EN DJANGO:
+                Protección CSRF
+                ✔ Nunca eliminar
+                -->
+                {% csrf_token %}
+
+                <h2>FORMULARIO DE RESERVA</h2>
+
+                <!-- Campo libro -->
+                <label>Nombre del libro</label>
+                <input type="text" name="titulo" placeholder="ejemplo: cien años de soledad" required>
+
+                <!-- Campo fecha -->
+                <label>Fecha de reserva</label>
+                <input type="text" name="fecha_recerva" placeholder="ejemplo: 14/02/2026" required>
+
+                <!-- Submit -->
+                <button type="submit">Reservar</button>
+                <!-- mensaje de error -->
+                {% if messages %}
+                    {% for message in messages %}
+                    <label class="{% if 'Login exitosamente' in mensaje %}success{% else %}error{% endif %}">
+                        {{message}}
+                    </label>
+                    {% endfor %}
+                {% endif %}
+            </form>
+
         </div>
 
-        <!-- Navegación -->
-        <button class="boton-blanco" onclick="window.location.href='/reservas/'">
-            Volver al inicio
-        </button>
+        <!-- PANEL DERECHO -->
+        <div class="derecha">
 
-        <button class="boton-blanco" onclick="window.location.href='/logout/'">
-            Cerrar sesión
-        </button>
+            <!-- Imagen decorativa -->
+            <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
+
+            <h2>Mi Perfil</h2>
+
+            <!-- Variables Django -->
+            <div class="info">
+                <p>Correo: {{ datos.email }}</p>
+                <p>Fecha de registro: {{ datos.fecha_registro }}</p>
+                <p>rol: {{datos.rol}}</p>
+            </div>
+
+            <!-- Navegación -->
+            <button class="boton-blanco" onclick="window.location.href='/dashboard/'">
+                Volver al inicio
+            </button>
+
+            <button class="boton-blanco" onclick="window.location.href='/cerrar_sesion/'">
+                Cerrar sesión
+            </button>
+
+        </div>
 
     </div>
-
-</div>
 
 </body>
 </html>
