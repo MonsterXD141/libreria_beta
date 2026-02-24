@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+
+<!-- Título de la pestaña del navegador -->
+<title>Biblioteca Proyect</title>
+
+<!-- 
+NOTA GENERAL:
+El CSS está embebido en el HTML.
+✔ Bien para proyectos pequeños o pruebas
+✖ En producción → mejor archivo CSS externo
+-->
+
+<style>
+
+/* Reset básico + fuente global */
+body{
+    margin:0; /* Evita márgenes por defecto del navegador */
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Barra superior */
+.navbar{
+    background: linear-gradient(90deg,#6a00ff,#8e2de2);
+    color:white;
+    padding:20px 40px;
+    font-weight:bold;
+    font-size:22px;
+    letter-spacing:2px;
+}
+
+/* Layout principal */
+.contenedor{
+    display:flex; /* Distribuye izquierda/derecha */
+    
+    /* 
+    IMPORTANTE:
+    100vh = altura total pantalla
+    Se resta altura navbar para evitar scroll
+    */
+    height:calc(100vh - 70px);
+}
+
+/* Panel izquierdo */
+.izquierda{
+    flex:2; /* Ocupa más espacio que derecha */
+    background:#e6e6e6;
+
+    /* Centrado perfecto del formulario */
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Caja del formulario */
+.formulario{
+    background: linear-gradient(180deg,#6a00ff,#8e2de2);
+    padding:40px;
+    width:350px; /* Ancho fijo (no responsive) */
+    color:white;
+    border-radius:10px;
+}
+
+/* Título del formulario */
+.formulario h2{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+/* Labels */
+.formulario label{
+    display:block;
+    margin-top:15px;
+    font-size:14px;
+}
+
+/* Inputs */
+.formulario input{
+    width:100%; /* Ocupa todo el contenedor */
+    padding:10px;
+    margin-top:5px;
+    border:none;
+    border-radius:5px;
+}
+
+/* Botón principal */
+.formulario button{
+    margin-top:25px;
+    width:100%;
+    padding:12px;
+
+    /* Contraste visual correcto */
+    background:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* Feedback visual (UX) */
+.formulario button:hover{
+    background:#f0f0f0;
+}
+
+/* Panel derecho */
+.derecha{
+    flex:1; /* Menor espacio que izquierda */
+
+    background: linear-gradient(180deg,#6a00ff,#8e2de2);
+    color:white;
+
+    display:flex;
+    flex-direction:column; /* Elementos en columna */
+    align-items:center;
+
+    padding:40px 20px;
+}
+
+/* Imagen del perfil */
+.derecha img{
+    width:100px;
+    margin-bottom:20px;
+}
+
+/* Info del usuario */
+.info{
+    text-align:left;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+/* Botones secundarios */
+.boton-blanco{
+    background:white;
+    color:black;
+    border:none;
+    padding:10px;
+    width:150px;
+    margin-top:10px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+/* Hover consistente */
+.boton-blanco:hover{
+    background:#f0f0f0;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Barra superior / Header -->
+<div class="navbar">
+    BIBLIOTECA PROYECT
+</div>
+
+<!-- Contenedor principal FLEX -->
+<div class="contenedor">
+
+    <!-- PANEL IZQUIERDO -->
+    <div class="izquierda">
+
+        <!-- 
+        FORMULARIO DJANGO
+        method="POST" → necesario para modificar datos
+        -->
+        <form class="formulario" method="POST">
+
+            <!--
+            CRÍTICO EN DJANGO:
+            Protección CSRF
+            ✔ Nunca eliminar en formularios POST
+            -->
+            {% csrf_token %}
+
+            <h2>EDITAR RESERVA</h2>
+
+            <!-- Campo libro -->
+            <label>Nombre del libro</label>
+            <input
+                type="text"
+                name="libro"  <!-- IMPORTANTE: coincide con views.py -->
+                placeholder="ejemplo: cien años de soledad"
+                required> <!-- Validación HTML básica -->
+
+            <!-- Campo fecha -->
+            <label>Fecha de reserva</label>
+            <input
+                type="text"
+                name="fecha"
+                placeholder="ejemplo: 14/02/2026"
+                required>
+
+            <!-- Botón submit -->
+            <!--
+            type="submit" → dispara POST al backend
+            -->
+            <button type="submit">EDITAR</button>
+        </form>
+
+    </div>
+
+    <!-- PANEL DERECHO -->
+    <div class="derecha">
+
+        <!-- Imagen decorativa -->
+        <img
+            src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" 
+            alt="Libro">
+
+        <h2>Mi Perfil</h2>
+
+        <!--
+        VARIABLES DJANGO
+        Se inyectan desde el contexto
+        -->
+        <div class="info">
+            <p>Correo: {{ user.email }}</p>
+            <p>Fecha de registro: {{ user.date_joined }}</p>
+        </div>
+
+        <!-- Navegación -->
+        <!--
+        Buen patrón:
+        Botones JS para redirección simple
+        -->
+        <button
+            class="boton-blanco"
+            onclick="window.location.href='/reservas/'">
+            Volver al inicio
+        </button>
+
+        <button
+            class="boton-blanco"
+            onclick="window.location.href='/logout/'">
+            Cerrar sesión
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>

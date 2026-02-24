@@ -2,39 +2,67 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+
+    <!-- 
+    IMPORTANTE:
+    Esto permite que el diseño se adapte a móviles
+    (Esta vista SÍ es responsive)
+    -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIBLIOTECA</title>
+
+    <!-- Título de la pestaña -->
+    <title>BIBLIOTECA LOGIN</title>
 
     <style>
+
+        /* 
+        Reset global
+        ✔ Buena práctica para controlar tamaños
+        */
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* 
+        Layout principal
+        ✔ Centrado perfecto del formulario
+        ✔ Altura completa de pantalla
+        */
         body {
             background: linear-gradient(135deg, #2711f0, #490780);
             min-height: 100vh;
+
             display: flex;
             justify-content: center;
             align-items: center;
+
             margin: 0;
         }
 
+        /* 
+        Contenedor del formulario
+        ✔ Limita ancho (responsive)
+        ✔ Sombra moderna
+        */
         .form-container {
             background: #ffffff;
             padding: 30px 40px;
             width: 100%;
             max-width: 420px;
+
             border-radius: 12px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
 
+        /* Título */
         .form-container h2 {
             text-align: center;
             margin-bottom: 25px;
             color: #4637ce;
         }
 
+        /* Labels */
         label {
             display: block;
             margin-bottom: 6px;
@@ -42,41 +70,57 @@
             color: #000000;
         }
 
+        /* Inputs */
         input {
-            width: 100%;
+            width: 100%; /* Ocupa todo el contenedor */
             padding: 10px;
             margin-bottom: 18px;
+
             border-radius: 6px;
             border: 1px solid #ccc;
             font-size: 14px;
         }
 
+        /* 
+        Feedback UX
+        ✔ Mejora experiencia del usuario
+        */
         input:focus {
             outline: none;
             border-color: #4637ce;
         }
 
+        /* Botón principal */
         button {
             width: 100%;
             padding: 12px;
+
             background-color: #4637ce;
             color: #fff;
+
             border: none;
             border-radius: 6px;
+
             font-size: 15px;
             font-weight: bold;
             cursor: pointer;
+
             transition: background 0.3s ease;
         }
 
+        /* Hover */
         button:hover {
             background-color: #3a2c9e;
         }
 
+        /* 
+        Mensajes de estado (MUY buena práctica)
+        */
         .success {
             margin-top: 15px;
             padding: 10px;
             border-radius: 6px;
+
             background-color: #e6f9ec;
             color: #17ff02;
             text-align: center;
@@ -87,35 +131,61 @@
             margin-top: 15px;
             padding: 10px;
             border-radius: 6px;
+
             background-color: #fdecea;
             color: #ff0019;
             text-align: center;
             font-weight: 600;
         }
+
     </style>
 </head>
 
 <body>
 
     <div class="form-container">
-        <h2>Registro de Biblioteca</h2>
+        <h2>Login de Biblioteca</h2>
 
+        <!-- 
+        FORMULARIO DJANGO
+        method="POST" → correcto para login
+        -->
         <form method="POST">
 
+            <!-- 
+            CRÍTICO EN DJANGO:
+            Protección CSRF
+            ✔ Nunca eliminar
+            -->
+            {% csrf_token %}
+
             <label>Correo electrónico</label>
+
+            <!-- 
+            type="email"
+            ✔ Validación automática del navegador
+            -->
             <input type="email" name="email" placeholder="@gmail.com" required>
 
             <label>Contraseña</label>
+
+            <!-- Campo contraseña -->
             <input type="password" name="password" required>
 
-            <button type="submit">Crear cuenta.</button>
+            <!-- Submit -->
+            <button type="submit">Iniciar sesión</button>
         </form>
 
-            <p class="{% if 'Registro exitosamente' in mensaje %}success{% else %}error{% endif %}">
-            </p>
+        <!-- 
+        MENSAJE DINÁMICO DJANGO
+        ✔ Clase cambia según resultado
+        ✔ Se muestra el mensaje
+        -->
+        <p class="{% if 'Login exitosamente' in mensaje %}success{% else %}error{% endif %}">
+            {{ mensaje }}
+        </p>
+
     </div>
 
 </body>
 </html>
-
-<!-- todabia no esta, dejeme intento algo -->

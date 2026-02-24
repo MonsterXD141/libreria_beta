@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+
+<!-- Título de la pestaña -->
+<title>Biblioteca Proyect</title>
+
+<!-- 
+CSS embebido
+✔ Correcto para prácticas / prototipo
+✖ En proyecto grande → archivo externo
+-->
+
+<style>
+
+/* Reset básico */
+body{
+    margin:0; /* Elimina márgenes por defecto */
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Barra superior */
+.navbar{
+    background: linear-gradient(90deg,#6a00ff,#8e2de2);
+    color:white;
+    padding:20px 40px;
+    font-weight:bold;
+    font-size:22px;
+    letter-spacing:2px;
+}
+
+/* Layout principal */
+.contenedor{
+    display:flex; /* Divide pantalla en dos paneles */
+    
+    /* 
+    IMPORTANTE:
+    Ajusta altura total evitando scroll vertical innecesario
+    */
+    height:calc(100vh - 70px);
+}
+
+/* PANEL IZQUIERDO */
+.izquierda{
+    flex:2; /* Ocupa más espacio que derecha */
+    background:#e6e6e6;
+    padding:40px;
+
+    /* 
+    MUY IMPORTANTE:
+    Si la tabla crece → aparece scroll interno
+    Evita romper layout
+    */
+    overflow:auto;
+}
+
+/* Caja blanca de la tabla */
+.tabla-contenedor{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+/* Título de sección */
+.tabla-contenedor h2{
+    margin-bottom:20px;
+}
+
+/* Tabla */
+table{
+    width:100%; /* Ocupa todo el contenedor */
+    border-collapse:collapse; /* Limpia bordes */
+}
+
+/* Celdas */
+th, td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+/* Encabezados */
+th{
+    background:#6a00ff;
+    color:white;
+}
+
+/* Feedback UX */
+tr:hover{
+    background:#f2f2f2;
+}
+
+/* Estados visuales */
+.pendiente{
+    color:orange;
+    font-weight:bold;
+}
+
+.confirmada{
+    color:green;
+    font-weight:bold;
+}
+
+.cancelada{
+    color:red;
+    font-weight:bold;
+}
+
+/* PANEL DERECHO */
+.derecha{
+    flex:1; /* Menor espacio */
+    background: linear-gradient(180deg,#6a00ff,#8e2de2);
+    color:white;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    padding:40px 20px;
+}
+
+/* Imagen */
+.derecha img{
+    width:100px;
+    margin-bottom:20px;
+}
+
+/* Info del perfil */
+.info{
+    text-align:left;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+/* Botones */
+.boton-blanco{
+    background:white;
+    color:black;
+    border:none;
+    padding:10px;
+    width:150px;
+    margin-top:10px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+/* Hover */
+.boton-blanco:hover{
+    background:#f0f0f0;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Header / Navbar -->
+<div class="navbar">
+    BIBLIOTECA PROYECT
+</div>
+
+<!-- Layout principal -->
+<div class="contenedor">
+
+    <!-- PANEL IZQUIERDO (Contenido dinámico) -->
+    <div class="izquierda">
+
+        <div class="tabla-contenedor">
+            <h2>Reservas Realizadas</h2>
+
+            <table>
+
+                <!-- Encabezados -->
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Estado</th>
+                </tr>
+
+                <!-- 
+                LOOP DJANGO
+                ✔ reservas debe venir desde views.py
+                -->
+                {% for reserva in reservas %}
+
+                <tr>
+                    <!-- Variables dinámicas -->
+                    <td>{{ reserva.fecha }}</td>
+                    <td>{{ reserva.usuario }}</td>
+                    <td>{{ reserva.libro }}</td>
+
+                    <!-- 
+                    LÓGICA DJANGO IMPORTANTE:
+                    Clase CSS dinámica según estado
+                    -->
+                    <td class="
+                        {% if reserva.estado == 'pendiente' %}pendiente
+                        {% elif reserva.estado == 'confirmada' %}confirmada
+                        {% else %}cancelada
+                        {% endif %}
+                    ">
+                        {{ reserva.estado }}
+                    </td>
+                </tr>
+
+                <!-- 
+                CASO CRÍTICO:
+                Si NO hay reservas → mensaje limpio
+                -->
+                {% empty %}
+                <tr>
+                    <td colspan="4">No hay reservas registradas.</td>
+                </tr>
+
+                <!-- Fin loop -->
+                {% endfor %}
+
+            </table>
+        </div>
+
+    </div>
+
+    <!-- PANEL DERECHO (Perfil / Navegación) -->
+    <div class="derecha">
+
+        <!-- Imagen decorativa -->
+        <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
+
+        <h2>Mi Perfil</h2>
+
+        <!-- Variables Django -->
+        <div class="info">
+            <p>Correo: {{ user.email }}</p>
+            <p>Fecha de registro: {{ user.date_joined }}</p>
+        </div>
+
+        <!-- Navegación -->
+        <button class="boton-blanco" onclick="window.location.href='/reservas/'">
+            Ver reservas
+        </button>
+
+        <button class="boton-blanco" onclick="window.location.href='/logout/'">
+            Cerrar sesión
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>
