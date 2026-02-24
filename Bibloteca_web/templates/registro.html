@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Configuración básica del documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BIBLIOTECA</title>
 
     <style>
+        /* Reset básico + fuente general */
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* Fondo y centrado del formulario */
         body {
             background: linear-gradient(135deg, #2711f0, #490780);
             min-height: 100vh;
@@ -20,6 +23,7 @@
             margin: 0;
         }
 
+        /* Contenedor principal del formulario */
         .form-container {
             background: #ffffff;
             padding: 30px 40px;
@@ -29,19 +33,14 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
 
+        /* Título */
         .form-container h2 {
             text-align: center;
             margin-bottom: 25px;
             color: #4637ce;
         }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #000000;
-        }
-
+        /* Campos de entrada */
         input {
             width: 100%;
             padding: 10px;
@@ -51,11 +50,18 @@
             font-size: 14px;
         }
 
+        /* Efecto al seleccionar input */
         input:focus {
             outline: none;
             border-color: #4637ce;
         }
 
+        a{
+            margin-left: 32%;
+            margin-bottom: 18px;
+        }
+        
+        /* Botón principal */
         button {
             width: 100%;
             padding: 12px;
@@ -69,10 +75,12 @@
             transition: background 0.3s ease;
         }
 
+        /* Hover del botón */
         button:hover {
             background-color: #3a2c9e;
         }
 
+        /* Mensaje de éxito */
         .success {
             margin-top: 15px;
             padding: 10px;
@@ -83,6 +91,7 @@
             font-weight: 600;
         }
 
+        /* Mensaje de error */
         .error {
             margin-top: 15px;
             padding: 10px;
@@ -97,22 +106,32 @@
 
 <body>
 
+    <!-- Tarjeta del formulario -->
     <div class="form-container">
         <h2>Registro de Biblioteca</h2>
 
+        <!-- Formulario de registro -->
         <form method="POST">
 
+            {% csrf_token %}
+            <!-- Campo email -->
             <label>Correo electrónico</label>
             <input type="email" name="email" placeholder="@gmail.com" required>
 
+            <!-- Campo contraseña -->
             <label>Contraseña</label>
             <input type="password" name="password" required>
 
+            <!-- Botón enviar -->
             <button type="submit">Crear cuenta</button>
         </form>
 
-            <p class="{% if 'Registro exitosamente' in mensaje %}success{% else %}error{% endif %}">
-            </p>
+        <a href="/login/">¿Ya tienes cuenta?</a>
+
+        <!-- Mensaje dinámico (ej: Flask / Django / etc) -->
+        <p class="{% if 'Registro exitosamente' in mensaje %}success{% else %}error{% endif %}">
+            {{mesaje}}
+        </p>
     </div>
 
 </body>
