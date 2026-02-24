@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Configuración básica del documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIBLIOTECA</title>
+
+    <style>
+        /* Reset básico + fuente general */
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Fondo y centrado del formulario */
+        body {
+            background: linear-gradient(135deg, #2711f0, #490780);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        /* Contenedor principal del formulario */
+        .form-container {
+            background: #ffffff;
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Título */
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #4637ce;
+        }
+
+        /* Campos de entrada */
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        /* Efecto al seleccionar input */
+        input:focus {
+            outline: none;
+            border-color: #4637ce;
+        }
+
+        a{
+            margin-left: 32%;
+            margin-bottom: 18px;
+        }
+        
+        /* Botón principal */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4637ce;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        /* Hover del botón */
+        button:hover {
+            background-color: #3a2c9e;
+        }
+
+        /* Mensaje de éxito */
+        .success {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #e6f9ec;
+            color: #17ff02;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Mensaje de error */
+        .error {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #fdecea;
+            color: #ff0019;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Tarjeta del formulario -->
+    <div class="form-container">
+        <h2>Registro de Biblioteca</h2>
+
+        <!-- Formulario de registro -->
+        <form method="POST">
+
+            {% csrf_token %}
+            <!-- Campo email -->
+            <label>Correo electrónico</label>
+            <input type="email" name="email" placeholder="@gmail.com" required>
+
+            <!-- Campo contraseña -->
+            <label>Contraseña</label>
+            <input type="password" name="password" required>
+
+            <!-- Botón enviar -->
+            <button type="submit">Crear cuenta</button>
+        </form>
+
+        <a href="/login/">¿Ya tienes cuenta?</a>
+
+        <!-- Mensaje dinámico (ej: Flask / Django / etc) -->
+        <p class="{% if 'Registro exitosamente' in mensaje %}success{% else %}error{% endif %}">
+            {{mesaje}}
+        </p>
+    </div>
+
+</body>
+</html>
