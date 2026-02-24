@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+¿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -90,6 +90,12 @@
             border-color: #4637ce;
         }
 
+        a{
+            margin-left: 25%;
+            margin-bottom: 20px;
+        }
+
+
         /* Botón principal */
         button {
             width: 100%;
@@ -172,6 +178,9 @@
             <!-- Campo contraseña -->
             <input type="password" name="password" required>
 
+            <!-- link para ir a regisrtro -->
+            <a href="/registro/">¿Necesitas una cuenta?</a>
+
             <!-- Submit -->
             <button type="submit">Iniciar sesión</button>
         </form>
@@ -181,10 +190,13 @@
         ✔ Clase cambia según resultado
         ✔ Se muestra el mensaje
         -->
-        <p class="{% if 'Login exitosamente' in mensaje %}success{% else %}error{% endif %}">
-            {{ mensaje }}
-        </p>
-
+        {% if messages %}
+            {% for message in messages %}
+            <p class="{% if 'Login exitosamente' in mensaje %}success{% else %}error{% endif %}">
+                {{message}}
+            </p>
+            {% endfor %}
+        {% endif %}
     </div>
 
 </body>
