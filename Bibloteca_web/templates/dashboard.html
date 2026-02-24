@@ -6,98 +6,105 @@
 <!-- Título de la pestaña -->
 <title>Biblioteca Proyect</title>
 
+<!-- 
+CSS embebido
+✔ Bien para práctica / prototipo
+✖ En proyecto real → CSS externo
+-->
+
 <style>
 
 /* Reset básico */
 body{
-    margin:0; /* Elimina márgenes por defecto */
+    margin:0; /* Evita márgenes por defecto */
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* NAVBAR / ENCABEZADO */
-.navbar{  
-
-    /* Visualmente fuerte → buena identidad */
+/* Navbar superior */
+.navbar{
     background: linear-gradient(90deg,#6a00ff,#8e2de2);
     color:white;
-
     padding:20px 40px;
     font-weight:bold;
     font-size:22px;
-
-    letter-spacing:2px; /* Estilo tipo dashboard/app */
+    letter-spacing:2px;
 }
 
 /* Layout principal */
 .contenedor{
-    display:flex; /* Divide izquierda / derecha */
-
+    display:flex; /* Divide pantalla */
+    
     /* 
     IMPORTANTE:
-    Ajuste de altura total de pantalla
+    Altura total menos navbar
     */
     height:calc(100vh - 70px);
 }
 
-/* PANEL IZQUIERDO (Contenido principal) */
-.izquierda{  
-
-    flex:2; /* Zona dominante */
-
+/* PANEL IZQUIERDO */
+.izquierda{
+    flex:2;
     background:#e6e6e6;
 
-    /* Centrado vertical + horizontal */
+    /* Centrado del formulario */
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
+}
 
-    text-align:center;
+/* Caja del formulario */
+.formulario{
+    background: linear-gradient(180deg,#6a00ff,#8e2de2);
     padding:40px;
+    width:350px; /* Ancho fijo */
+    color:white;
+    border-radius:10px;
 }
 
 /* Título */
-.izquierda h2{
-    font-style:italic; /* Toque visual elegante */
+.formulario h2{
+    text-align:center;
+    margin-bottom:30px;
 }
 
-/* Texto */
-.izquierda p{
-    margin-top:10px;
-
-    /* 
-    MUY BUENA PRÁCTICA:
-    Limita ancho → mejora lectura
-    */
-    max-width:400px;
+/* Labels */
+.formulario label{
+    display:block;
+    margin-top:15px;
+    font-size:14px;
 }
 
-/* Contenedor de botones */
-.boton-principal{
-    margin-top:30px;
-}
-
-/* Botones principales */
-.boton-morado{
-    background:#6a00ff;
-    color:white;
+/* Inputs */
+.formulario input{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
 
     border:none;
-    padding:10px 25px;
-    margin:10px;
+    border-radius:5px;
+}
+
+/* Botón principal */
+.formulario button{
+    margin-top:25px;
+    width:100%;
+    padding:12px;
+
+    background:white;
+    border:none;
+    border-radius:5px;
 
     cursor:pointer;
     font-weight:bold;
 }
 
 /* Feedback UX */
-.boton-morado:hover{
-    background:#5000cc;
+.formulario button:hover{
+    background:#f0f0f0;
 }
 
-/* PANEL DERECHO (Perfil / Acciones) */
-.derecha{  
-
+/* PANEL DERECHO */
+.derecha{
     flex:1;
 
     background: linear-gradient(180deg,#6a00ff,#8e2de2);
@@ -110,38 +117,33 @@ body{
     padding:40px 20px;
 }
 
-/* Imagen decorativa */
+/* Imagen */
 .derecha img{
     width:100px;
     margin-bottom:20px;
 }
 
-/* Título perfil */
-.derecha h2{
-    margin-bottom:20px;
-}
-
-/* Info del usuario */
+/* Info perfil */
 .info{
     text-align:left;
     font-size:14px;
     margin-bottom:20px;
 }
 
-/* Botones secundarios */
+/* Botones */
 .boton-blanco{
     background:white;
     color:black;
-
     border:none;
+
     padding:10px;
     width:150px;
 
     margin-top:10px;
     cursor:pointer;
+    border-radius:5px;
 }
 
-/* Hover */
 .boton-blanco:hover{
     background:#f0f0f0;
 }
@@ -151,82 +153,81 @@ body{
 
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    BIBLIOTECA PROYECT
-</div>
+    <!-- Navbar -->
+    <div class="navbar">
+        BIBLIOTECA PROYECT
+    </div>
 
-<!-- LAYOUT PRINCIPAL -->
-<div class="contenedor">
+    <!-- Layout principal -->
+    <div class="contenedor">
 
-    <!-- PANEL IZQUIERDO -->
-    <div class="izquierda">
-
-        <!-- Mensaje de bienvenida -->
-        <h2>Bienvenid@ a Biblioteca Proyect</h2>
-
-        <!-- 
-        TEXTO INFORMATIVO:
-        ✔ Claro
-        ✔ Corto
-        ✔ Bien centrado
-        -->
-        <p>
-            Aquí encontrarás una gran variedad de libros para 
-            reservar y disfrutar de la lectura.
-        </p>
-
-        <!-- ACCIONES PRINCIPALES -->
-        <div class="boton-principal">
+        <!-- PANEL IZQUIERDO -->
+        <div class="izquierda">
 
             <!-- 
-            NAVEGACIÓN IMPORTANTE:
-            Botones → redirección a vistas Django
+            FORMULARIO DJANGO
+            method="POST" → correcto para crear reservas
             -->
-            <button 
-                class="boton-morado" 
-                onclick="window.location.href='/reserva/'">
-                RESERVA
+            <form class="formulario" method="POST">
+
+                <!-- 
+                CRÍTICO EN DJANGO:
+                Protección CSRF
+                ✔ Nunca eliminar
+                -->
+                {% csrf_token %}
+
+                <h2>FORMULARIO DE RESERVA</h2>
+
+                <!-- Campo libro -->
+                <label>Nombre del libro</label>
+                <input type="text" name="titulo" placeholder="ejemplo: cien años de soledad" required>
+
+                <!-- Campo fecha -->
+                <label>Fecha de reserva</label>
+                <input type="text" name="fecha_recerva" placeholder="ejemplo: 14/02/2026" required>
+
+                <!-- Submit -->
+                <button type="submit">Reservar</button>
+                <!-- mensaje de error -->
+                {% if messages %}
+                    {% for message in messages %}
+                    <label class="{% if 'Login exitosamente' in mensaje %}success{% else %}error{% endif %}">
+                        {{message}}
+                    </label>
+                    {% endfor %}
+                {% endif %}
+            </form>
+
+        </div>
+
+        <!-- PANEL DERECHO -->
+        <div class="derecha">
+
+            <!-- Imagen decorativa -->
+            <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
+
+            <h2>Mi Perfil</h2>
+
+            <!-- Variables Django -->
+            <div class="info">
+                <p>Correo: {{ datos.email }}</p>
+                <p>Fecha de registro: {{ datos.fecha_registro }}</p>
+                <p>rol: {{datos.rol}}</p>
+            </div>
+
+            <!-- Navegación -->
+            <button class="boton-blanco" onclick="window.location.href='/dashboard/'">
+                Volver al inicio
             </button>
 
-            <button 
-                class="boton-morado" 
-                onclick="window.location.href='/listar/'">
-                LISTAR
+            <button class="boton-blanco" onclick="window.location.href='/cerrar_sesion/'">
+                Cerrar sesión
             </button>
-        </div>
-    </div>
 
-    <!-- PANEL DERECHO -->
-    <div class="derecha">  
-
-        <!-- Imagen decorativa -->
-        <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
-
-        <h2>Mi Perfil</h2>
-
-        <!-- VARIABLES DJANGO -->
-        <div class="info">
-            <p>Correo: {{ user.email }}</p>
-            <p>Fecha de registro: {{ user.date_joined }}</p>
         </div>
 
-        <!-- ACCIONES DE USUARIO -->
-        <button 
-            class="boton-blanco" 
-            onclick="window.location.href='/reservas/'">
-            Ver reservas
-        </button>
-
-        <button 
-            class="boton-blanco" 
-            onclick="window.location.href='/logout/'">
-            Cerrar sesión
-        </button>
-
     </div>
-
-</div>
 
 </body>
 </html>
