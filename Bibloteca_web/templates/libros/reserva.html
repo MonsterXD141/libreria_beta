@@ -2,17 +2,25 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+
+<!-- Título de la pestaña -->
 <title>Biblioteca Proyect</title>
 
-<!---NO ES RESPONSIVE, LO DEJE PARA QUE SOLO SE ADAPTARA AL COPUTADOR/PORTATIL-->
+<!-- 
+CSS embebido
+✔ Bien para práctica / prototipo
+✖ En proyecto real → CSS externo
+-->
 
 <style>
 
+/* Reset básico */
 body{
-    margin:0;
+    margin:0; /* Evita márgenes por defecto */
     font-family: 'Segoe UI', sans-serif;
 }
 
+/* Navbar superior */
 .navbar{
     background: linear-gradient(90deg,#6a00ff,#8e2de2);
     color:white;
@@ -22,88 +30,115 @@ body{
     letter-spacing:2px;
 }
 
+/* Layout principal */
 .contenedor{
-    display:flex;
+    display:flex; /* Divide pantalla */
+    
+    /* 
+    IMPORTANTE:
+    Altura total menos navbar
+    */
     height:calc(100vh - 70px);
 }
 
+/* PANEL IZQUIERDO */
 .izquierda{
     flex:2;
     background:#e6e6e6;
+
+    /* Centrado del formulario */
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
+/* Caja del formulario */
 .formulario{
     background: linear-gradient(180deg,#6a00ff,#8e2de2);
     padding:40px;
-    width:350px;
+    width:350px; /* Ancho fijo */
     color:white;
     border-radius:10px;
 }
 
+/* Título */
 .formulario h2{
     text-align:center;
     margin-bottom:30px;
 }
 
+/* Labels */
 .formulario label{
     display:block;
     margin-top:15px;
     font-size:14px;
 }
 
+/* Inputs */
 .formulario input{
     width:100%;
     padding:10px;
     margin-top:5px;
+
     border:none;
     border-radius:5px;
 }
 
+/* Botón principal */
 .formulario button{
     margin-top:25px;
     width:100%;
     padding:12px;
+
     background:white;
     border:none;
     border-radius:5px;
+
     cursor:pointer;
     font-weight:bold;
 }
 
+/* Feedback UX */
 .formulario button:hover{
     background:#f0f0f0;
 }
 
+/* PANEL DERECHO */
 .derecha{
     flex:1;
+
     background: linear-gradient(180deg,#6a00ff,#8e2de2);
     color:white;
+
     display:flex;
     flex-direction:column;
     align-items:center;
+
     padding:40px 20px;
 }
 
+/* Imagen */
 .derecha img{
     width:100px;
     margin-bottom:20px;
 }
 
+/* Info perfil */
 .info{
     text-align:left;
     font-size:14px;
     margin-bottom:20px;
 }
 
+/* Botones */
 .boton-blanco{
     background:white;
     color:black;
     border:none;
+
     padding:10px;
     width:150px;
+
     margin-top:10px;
     cursor:pointer;
     border-radius:5px;
@@ -118,54 +153,81 @@ body{
 
 <body>
 
-<div class="navbar">
-    BIBLIOTECA PROYECT
-</div>
-
-<div class="contenedor">
-
-    <div class="izquierda">
-
-        <form class="formulario" method="POST">
-             {% csrf_token %}     <!-- No quitarlo por el momento0 -->
-
-            <h2>FORMULARIO DE RESERVA</h2>
-
-            <label>Nombre del libro</label>
-            <input type="text" name="libro" placeholder="ejemplo: cien años de soledad" required>
-
-            <label>Fecha de reserva</label>
-            <input type="text" name="fecha" placeholder="ejemplo: 14/02/2026" required>
-
-            <button type="submit">Reservar</button>
-        </form>
-
+    <!-- Navbar -->
+    <div class="navbar">
+        BIBLIOTECA PROYECT
     </div>
 
-    <div class="derecha">
+    <!-- Layout principal -->
+    <div class="contenedor">
 
-        <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
+        <!-- PANEL IZQUIERDO -->
+        <div class="izquierda">
 
-        <h2>Mi Perfil</h2>
+            <!-- 
+            FORMULARIO DJANGO
+            method="POST" → correcto para crear reservas
+            -->
+            <form class="formulario" method="POST">
 
-        <div class="info">
-            <p>Correo: {{ user.email }}</p>
-            <p>Fecha de registro: {{ user.date_joined }}</p>
+                <!-- 
+                CRÍTICO EN DJANGO:
+                Protección CSRF
+                ✔ Nunca eliminar
+                -->
+                {% csrf_token %}
+
+                <h2>FORMULARIO DE RESERVA</h2>
+
+                <!-- Campo libro -->
+                <label>Nombre del libro</label>
+                <input type="text" name="titulo" placeholder="ejemplo: cien años de soledad" required>
+
+                <!-- Campo fecha -->
+                <label>Fecha de reserva</label>
+                <input type="text" name="fecha_recerva" placeholder="ejemplo: 14/02/2026" required>
+
+                <!-- Submit -->
+                <button type="submit">Reservar</button>
+                <!-- mensaje de error -->
+                {% if messages %}
+                    {% for message in messages %}
+                    <label class="{% if 'Login exitosamente' in mensaje %}success{% else %}error{% endif %}">
+                        {{message}}
+                    </label>
+                    {% endfor %}
+                {% endif %}
+            </form>
+
         </div>
 
-        <button class="boton-blanco" onclick="window.location.href='/reservas/'">
-            Volver al inicio 
-        </button>
+        <!-- PANEL DERECHO -->
+        <div class="derecha">
 
-        <button class="boton-blanco" onclick="window.location.href='/logout/'">
-            Cerrar sesión
-        </button>
+            <!-- Imagen decorativa -->
+            <img src="https://i.pinimg.com/originals/ea/1d/28/ea1d28663072613b9da4d17d3e4c925a.jpg" alt="Libro">
+
+            <h2>Mi Perfil</h2>
+
+            <!-- Variables Django -->
+            <div class="info">
+                <p>Correo: {{ datos.email }}</p>
+                <p>Fecha de registro: {{ datos.fecha_registro }}</p>
+                <p>rol: {{datos.rol}}</p>
+            </div>
+
+            <!-- Navegación -->
+            <button class="boton-blanco" onclick="window.location.href='/dashboard/'">
+                Volver al inicio
+            </button>
+
+            <button class="boton-blanco" onclick="window.location.href='/cerrar_sesion/'">
+                Cerrar sesión
+            </button>
+
+        </div>
 
     </div>
-
-</div>
 
 </body>
 </html>
-
-
